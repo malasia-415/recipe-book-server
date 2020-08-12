@@ -1,7 +1,8 @@
-const {DATABASE_URL} = require('./src/config')
-console.log(DATABASE_URL)
+// const {DATABASE_URL} = require('./src/config')
+// console.log(DATABASE_URL)
 
 require('dotenv').config();
+console.log(process.env.DATABASE_URL)
 
 module.exports = {
   "migrationsDirectory": "migrations",

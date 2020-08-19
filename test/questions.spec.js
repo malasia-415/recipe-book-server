@@ -7,13 +7,15 @@ const knex = require('knex')
         {
             title: 'First question',
             description: 'This is your first question',
-            author: 'Jone'
+            author: 'Jone',
+            id: 1
         },
 
         {
             title: 'Second question',
             description: 'This is your second question',
-            author: 'Ashley'
+            author: 'Ashley',
+            id: 2
         }
     ]
     
@@ -24,10 +26,10 @@ const knex = require('knex')
          })
        })
 
-       before('cleanup', () => db.raw('TRUNCATE TABLE answers;'));
+      //  before('cleanup', () => db.raw('TRUNCATE TABLE answers;'));
        before('cleanup', () => db.raw('TRUNCATE TABLE questions CASCADE;'));
 
-       before(() => db('questions').truncate())
+       before(() => {
            return db
              .into('questions')
              .insert(testQuestions)
@@ -42,3 +44,4 @@ const knex = require('knex')
          expect(actual).to.eql(testQuestions)
        })
      })
+}) 

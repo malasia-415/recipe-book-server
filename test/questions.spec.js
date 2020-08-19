@@ -29,7 +29,7 @@ const knex = require('knex')
       //  before('cleanup', () => db.raw('TRUNCATE TABLE answers;'));
        before('cleanup', () => db.raw('TRUNCATE TABLE questions CASCADE;'));
 
-       afterEach(() => db.raw('TRUNCATE TABLE questions CASCADE;'))
+       afterEach('cleanup', () => db.raw('TRUNCATE TABLE questions CASCADE;'))
 
       //  before(() => {
       //      return db
@@ -63,5 +63,23 @@ const knex = require('knex')
            })
        })
      })
+
+     it(`insertQuestions() inserts a new questions and resolves the new questions with an 'id'`, () => {
+      const newQuestion = {
+        title: 'First question',
+        description: 'This is your first question',
+        author: 'Jone',
+      }
+
+      return QuestionsService.insertQuestion(db, newQuestion)
+      .then(actual => {
+              expect(actual).to.eql({
+                id: 1,
+                title: newQuestion.title,
+                author: newQuestion.author,
+                description: newQuestion.description
+              })
+            })
+  })
 
 }) 

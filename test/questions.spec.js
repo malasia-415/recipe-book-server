@@ -1,8 +1,9 @@
-const QuestionsService = require('../src/questions/questions-service')
-const knex = require('knex')
+const knex = require('knex');
+const QuestionsService = require('../src/questions/questions-service');
 
-  //  describe(`getAllQuestions()`, () => {
-    let db
+   describe(`getAllQuestions()`, () => {
+    let db;
+    
     let testQuestions = [
         {
             title: 'First question',
@@ -29,7 +30,7 @@ const knex = require('knex')
       //  before('cleanup', () => db.raw('TRUNCATE TABLE answers;'));
        before('cleanup', () => db.raw('TRUNCATE TABLE questions CASCADE;'));
 
-       afterEach('cleanup', () => db.raw('TRUNCATE TABLE questions CASCADE;'))
+       afterEach('cleanup', () => db.raw('TRUNCATE TABLE questions CASCADE;'));
 
       //  before(() => {
       //      return db
@@ -41,10 +42,12 @@ const knex = require('knex')
 
     describe(`getAllQuestions()`, () => {
       context(`Given 'questions' has data`, () => {
-           before(() => {
+           beforeEach(() => {
              return db
                .into('questions')
-               .insert(testQuestions)
+              // .getAllQuestions(db)
+              .insert(testQuestions)
+              
            })
 
       it(`getAllQuestions() resolves all questions from 'questions' table`, () => {
@@ -64,6 +67,7 @@ const knex = require('knex')
        })
      })
 
+    
      it(`insertQuestions() inserts a new questions and resolves the new questions with an 'id'`, () => {
       const newQuestion = {
         title: 'First question',
@@ -71,15 +75,67 @@ const knex = require('knex')
         author: 'Jone',
       }
 
-      return QuestionsService.insertQuestion(db, newQuestion)
+      return QuestionsService
+      .updateQuestions(db, updatedQuestionsId, updatedQuestionsId)
+      .insertQuestion(db, newQuestion)
       .then(actual => {
-              expect(actual).to.eql({
-                id: 1,
-                title: newQuestion.title,
-                author: newQuestion.author,
-                description: newQuestion.description
-              })
-            })
+        expect(actual).to.eql({
+          id: 1,
+          title: newQuestion.title,
+          author: newQuestion.author,
+          description: newQuestion.description
+        });
+        return db('questions').select('*').where({ id: updatedQuestionsId}).first();
+      });
   })
 
-}) 
+getQuestionsById(knex, id) 
+describe('getById()', () => {
+  it('should return undefined', () => {
+        return knex.from('questions').select('*').where('id', id).first()
+        .getById(db, 999)
+        .then(questions => expect(questions).to.be.undefined);
+    });
+
+    context('with data present', () => {
+      before('insert articles', () => 
+        db('blogful_articles')
+          .into('questions')
+          .insert(testArticles)
+      );
+})
+
+it(`getQuestionsById() resolves an questions by id from 'questions' table`, () => {
+    const thirdId = 3
+    const thirdTestQuestions = testQuestions[thirdId - 1]
+    return QuestionsService.getQuestionsById(db, thirdId)
+      .then(actual => {
+        expect(actual).to.eql({
+          id: thirdId,
+          title: thirdTestQuestions.title,
+          author: thirdTestQuestions.author,
+          description: thirdTestQuestions.description
+        });
+      });
+    })
+
+it(`updateQuestions() updates an question from the 'question' table`, () => {
+        const idOfQuestionsToUpdate = 3
+        const newQuestionsData = {
+          id: 'updated id',
+          title: 'updated title',
+          author: 'updated content',
+          description: 'updated description',
+        }
+        return QuestionsService.updateQuestions(db, idOfQuestionsToUpdate, newQuestionsData)
+          .then(() => QuestionsService.getQuestionsById(db, idOfQuestionsToUpdate))
+          .then(questions => {
+            expect(questions).to.eql({
+              id: idOfQuetsionsToUpdate,
+              ...newQuestionsData,
+            })
+          })
+        })
+    })
+  })
+})

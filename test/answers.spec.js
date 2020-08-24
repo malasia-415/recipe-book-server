@@ -18,7 +18,7 @@ const knex = require('knex')
        before(() => {
          db = knex({
            client: 'pg',
-           connection: process.env.TEST_DATABASE_URL,
+           connection: process.env.DATABASE_URL,
          })
        })
       before('cleanup', () => db.raw('TRUNCATE TABLE answers CASCADE;'));
@@ -34,10 +34,6 @@ const knex = require('knex')
         );
     }); 
  });
-
-
-
-
 
 
   describe('insertAnswers()' , () => {

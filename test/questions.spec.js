@@ -16,15 +16,15 @@ const knex = require('knex')
         }
     ]
        before(() => {
-         db = knex({
+           db = knex({
            client: 'pg',
-           connection: process.env.TEST_DATABASE_URL,
+           connection: process.env.DATABASE_URL,
          })
        })
       before('cleanup', () => db.raw('TRUNCATE TABLE questions CASCADE;'));
       afterEach('cleanup', () => db.raw('TRUNCATE TABLE questions CASCADE;'))
       
-      after('destroy',() => db.destroy())
+      // after('destroy',() => db.destroy())
 
   describe('getAllQuestions()', () => {
     it('returns an empty array', () => {

@@ -26,7 +26,7 @@
     "express-jwt": "^6.0.0",
     "helmet": "^3.23.3",
     "jwks-rsa": "^1.8.1",
-    "knex": "^0.21.3",
+    "knex": "^2.4.0",
     "morgan": "^1.10.0",
     "pg": "^7.x.x",
     "supertest": "^4.0.2"
